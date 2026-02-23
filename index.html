@@ -52,13 +52,51 @@
 
   <div class="container">
     <iframe
+      id="hostalium-widget"
       src="https://api.hostalium.es/widget-embed.html?id=1"
       width="100%"
       height="700"
       style="border: none; border-radius: 8px;"
       allow="payment"
+      onerror="console.error('Error al cargar el iframe de Hostalium')"
     ></iframe>
   </div>
+
+  <script>
+    // Capturar errores de recursos
+    window.addEventListener('error', function(e) {
+      console.error('Error detectado:', {
+        mensaje: e.message,
+        archivo: e.filename,
+        línea: e.lineno,
+        columna: e.colno,
+        error: e.error
+      });
+    }, true);
+
+    // Capturar errores de fetch/XMLHttpRequest
+    const originalFetch = window.fetch;
+    window.fetch = function(...args) {
+      return originalFetch.apply(this, args)
+        .catch(error => {
+          console.error('Error en fetch:', {
+            url: args[0],
+            error: error.message
+          });
+          throw error;
+        });
+    };
+
+    // Monitorear el iframe
+    const iframe = document.getElementById('hostalium-widget');
+    iframe.addEventListener('load', function() {
+      console.log('Widget de Hostalium cargado correctamente');
+    });
+
+    iframe.addEventListener('error', function() {
+      console.error('Error al cargar el widget de Hostalium');
+    });
+  </script>
 
   <div style="text-align: center; margin-top: 30px; color: #999; font-size: 0.9em;">
     <p>Powered by Hostalium</p>
