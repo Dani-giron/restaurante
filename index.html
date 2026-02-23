@@ -3,104 +3,714 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Restaurante - Reserva tu Mesa</title>
+  <title>La Terraza - Restaurante de Alta Cocina</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    /* Navegación */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      padding: 1rem 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+
+    nav.scrolled {
+      background: rgba(0, 0, 0, 1);
+      padding: 0.5rem 0;
+    }
+
+    .nav-container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px;
-      background-color: #f5f5f5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
     }
-    .header {
-      text-align: center;
-      padding: 40px 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #d4af37;
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links a {
       color: white;
-      border-radius: 10px;
-      margin-bottom: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
     }
-    .header h1 {
-      margin: 0;
-      font-size: 2.5em;
+
+    .nav-links a:hover {
+      color: #d4af37;
     }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #d4af37;
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .menu-toggle {
+      display: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                  url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      padding: 2rem;
+      animation: fadeInUp 1s ease;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      letter-spacing: 3px;
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: #d4af37;
+      color: #000;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn:hover {
+      background: #b8941f;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Secciones */
+    section {
+      padding: 5rem 2rem;
+    }
+
     .container {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      max-width: 600px;
+      max-width: 1200px;
       margin: 0 auto;
     }
-    .info {
+
+    .section-title {
       text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      color: #d4af37;
+      position: relative;
+      padding-bottom: 1rem;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: #d4af37;
+    }
+
+    /* Sobre Nosotros */
+    .about {
+      background: #f8f8f8;
+    }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about-text {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #555;
+    }
+
+    .about-image {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* Menú */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .menu-item {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .menu-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .menu-item-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .menu-item-content {
+      padding: 1.5rem;
+    }
+
+    .menu-item-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .menu-item-price {
+      color: #d4af37;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .menu-item-description {
       color: #666;
-      margin-bottom: 20px;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Galería */
+    .gallery {
+      background: #f8f8f8;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      aspect-ratio: 1;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    /* Reservas */
+    .reservations {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: white;
+    }
+
+    .reservations .section-title {
+      color: #d4af37;
+    }
+
+    .reservation-container {
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .reservation-widget {
+      width: 100%;
+      min-height: 600px;
+      border: none;
+      border-radius: 10px;
+      background: white;
+    }
+
+    /* Contacto */
+    .contact {
+      background: #f8f8f8;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+
+    .contact-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .contact-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-card h3 {
+      color: #d4af37;
+      margin-bottom: 1rem;
+    }
+
+    .contact-card p {
+      color: #666;
+    }
+
+    /* Footer */
+    footer {
+      background: #1a1a1a;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .social-links a {
+      color: white;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+    }
+
+    .social-links a:hover {
+      color: #d4af37;
+    }
+
+    /* Animaciones */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background: rgba(0,0,0,0.95);
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        padding: 2rem 0;
+      }
+
+      .nav-links.active {
+        left: 0;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+      }
+
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+
+    /* Smooth Scroll */
+    html {
+      scroll-behavior: smooth;
     }
   </style>
 </head>
 <body>
+  <!-- Navegación -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <a href="#inicio" class="logo">🍽️ La Terraza</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+        <li><a href="#menu">Menú</a></li>
+        <li><a href="#galeria">Galería</a></li>
+        <li><a href="#reservas">Reservas</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <div class="menu-toggle" id="menuToggle">☰</div>
+    </div>
+  </nav>
 
-  <div class="header">
-    <h1>🍽️ Mi Restaurante</h1>
-    <p>Reserva tu mesa online</p>
-  </div>
+  <!-- Hero Section -->
+  <section class="hero" id="inicio">
+    <div class="hero-content">
+      <h1>La Terraza</h1>
+      <p>Experiencia gastronómica única en el corazón de la ciudad</p>
+      <a href="#reservas" class="btn">Reserva tu Mesa</a>
+    </div>
+  </section>
 
-  <div class="info">
-    <p>Selecciona fecha, hora y número de personas para hacer tu reserva</p>
-  </div>
+  <!-- Sobre Nosotros -->
+  <section class="about" id="sobre-nosotros">
+    <div class="container">
+      <h2 class="section-title">Sobre Nosotros</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>
+            <strong>La Terraza</strong> es un restaurante de alta cocina que combina tradición e innovación. 
+            Desde 2015, nuestro chef ejecutivo ha creado platos excepcionales utilizando ingredientes 
+            frescos y de temporada, provenientes de productores locales.
+          </p>
+          <p style="margin-top: 1.5rem;">
+            Nuestro ambiente elegante y acogedor, junto con un servicio impecable, hace que cada visita 
+            sea una experiencia memorable. Ya sea para una cena romántica, una celebración especial o 
+            un almuerzo de negocios, estamos aquí para hacer que su experiencia sea inolvidable.
+          </p>
+          <p style="margin-top: 1.5rem;">
+            <strong>Horario:</strong><br>
+            Lunes - Viernes: 13:00 - 16:00 / 20:00 - 23:30<br>
+            Sábados y Domingos: 13:00 - 16:00 / 20:00 - 00:00
+          </p>
+        </div>
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+             alt="Restaurante" class="about-image">
+      </div>
+    </div>
+  </section>
 
-  <div class="container">
-    <iframe
-      id="hostalium-widget"
-      src="https://api.hostalium.es/widget-embed.html?id=1"
-      width="100%"
-      height="700"
-      style="border: none; border-radius: 8px;"
-      allow="payment"
-      onerror="console.error('Error al cargar el iframe de Hostalium')"
-    ></iframe>
-  </div>
+  <!-- Menú -->
+  <section class="menu" id="menu">
+    <div class="container">
+      <h2 class="section-title">Nuestro Menú</h2>
+      <div class="menu-grid">
+        <div class="menu-item">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+               alt="Ensalada Mediterránea" class="menu-item-image">
+          <div class="menu-item-content">
+            <div class="menu-item-title">
+              <span>Ensalada Mediterránea</span>
+              <span class="menu-item-price">€14</span>
+            </div>
+            <p class="menu-item-description">
+              Mezcla de lechugas frescas, tomate cherry, queso feta, aceitunas kalamata y vinagreta de miel.
+            </p>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="https://images.unsplash.com/photo-1558030006-450675393462?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+               alt="Risotto de Setas" class="menu-item-image">
+          <div class="menu-item-content">
+            <div class="menu-item-title">
+              <span>Risotto de Setas</span>
+              <span class="menu-item-price">€18</span>
+            </div>
+            <p class="menu-item-description">
+              Arroz cremoso con setas silvestres, parmesano y trufa negra. Un clásico italiano refinado.
+            </p>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+               alt="Salmón a la Plancha" class="menu-item-image">
+          <div class="menu-item-content">
+            <div class="menu-item-title">
+              <span>Salmón a la Plancha</span>
+              <span class="menu-item-price">€22</span>
+            </div>
+            <p class="menu-item-description">
+              Salmón fresco con costra de hierbas, puré de patata y verduras de temporada al vapor.
+            </p>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="https://images.unsplash.com/photo-1558030136-eee31d6b5b73?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+               alt="Solomillo de Ternera" class="menu-item-image">
+          <div class="menu-item-content">
+            <div class="menu-item-title">
+              <span>Solomillo de Ternera</span>
+              <span class="menu-item-price">€28</span>
+            </div>
+            <p class="menu-item-description">
+              Solomillo a la parrilla con salsa de vino tinto, patatas asadas y espárragos verdes.
+            </p>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+               alt="Pasta Carbonara" class="menu-item-image">
+          <div class="menu-item-content">
+            <div class="menu-item-title">
+              <span>Pasta Carbonara</span>
+              <span class="menu-item-price">€16</span>
+            </div>
+            <p class="menu-item-description">
+              Spaghetti con panceta crujiente, huevo, parmesano y pimienta negra. Auténtica receta italiana.
+            </p>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+               alt="Tiramisú" class="menu-item-image">
+          <div class="menu-item-content">
+            <div class="menu-item-title">
+              <span>Tiramisú</span>
+              <span class="menu-item-price">€9</span>
+            </div>
+            <p class="menu-item-description">
+              Postre italiano clásico con café, mascarpone y cacao. El final perfecto para tu comida.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Galería -->
+  <section class="gallery" id="galeria">
+    <div class="container">
+      <h2 class="section-title">Galería</h2>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Interior del restaurante">
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Mesa elegante">
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Plato gourmet">
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Cocina">
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Barra del bar">
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Terraza">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reservas -->
+  <section class="reservations" id="reservas">
+    <div class="container">
+      <h2 class="section-title">Reserva tu Mesa</h2>
+      <div class="reservation-container">
+        <iframe
+          id="hostalium-widget"
+          src="https://api.hostalium.es/widget-embed.html?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN0YXVyYW50ZUlkIjoxLCJ0aXBvIjoid2lkZ2V0IiwiaWF0IjoxNzcxODU1NDg3LCJleHAiOjE4MDMzOTE0ODd9.zG-N1rZ5ZNiRRbxVpUb23pjnYz76wrNLDVnkyF0tGXI"
+          class="reservation-widget"
+          allow="payment"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section class="contact" id="contacto">
+    <div class="container">
+      <h2 class="section-title">Contacto</h2>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-icon">📍</div>
+          <h3>Dirección</h3>
+          <p>Calle Principal, 123<br>28001 Madrid, España</p>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">📞</div>
+          <h3>Teléfono</h3>
+          <p>+34 91 123 45 67<br>+34 91 123 45 68</p>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">✉️</div>
+          <h3>Email</h3>
+          <p>info@laterraza.es<br>reservas@laterraza.es</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2024 La Terraza. Todos los derechos reservados.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Facebook">📘</a>
+        <a href="#" aria-label="Instagram">📷</a>
+        <a href="#" aria-label="Twitter">🐦</a>
+        <a href="#" aria-label="TripAdvisor">⭐</a>
+      </div>
+      <p style="margin-top: 1rem; font-size: 0.9rem; color: #999;">
+        Diseñado con ❤️ para ofrecerte la mejor experiencia gastronómica
+      </p>
+    </div>
+  </footer>
 
   <script>
-    // Capturar errores de recursos
-    window.addEventListener('error', function(e) {
-      console.error('Error detectado:', {
-        mensaje: e.message,
-        archivo: e.filename,
-        línea: e.lineno,
-        columna: e.colno,
-        error: e.error
-      });
-    }, true);
+    // Navegación fija con efecto scroll
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
 
-    // Capturar errores de fetch/XMLHttpRequest
-    const originalFetch = window.fetch;
-    window.fetch = function(...args) {
-      return originalFetch.apply(this, args)
-        .catch(error => {
-          console.error('Error en fetch:', {
-            url: args[0],
-            error: error.message
+    // Menú móvil
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', function() {
+      navLinks.classList.toggle('active');
+    });
+
+    // Cerrar menú al hacer clic en un enlace
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', function() {
+        navLinks.classList.remove('active');
+      });
+    });
+
+    // Smooth scroll para navegación
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
           });
-          throw error;
-        });
+        }
+      });
+    });
+
+    // Animación al hacer scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
     };
 
-    // Monitorear el iframe
-    const iframe = document.getElementById('hostalium-widget');
-    iframe.addEventListener('load', function() {
-      console.log('Widget de Hostalium cargado correctamente');
-    });
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+        }
+      });
+    }, observerOptions);
 
-    iframe.addEventListener('error', function() {
-      console.error('Error al cargar el widget de Hostalium');
+    document.querySelectorAll('.menu-item, .contact-card, .gallery-item').forEach(el => {
+      observer.observe(el);
     });
   </script>
-
-  <div style="text-align: center; margin-top: 30px; color: #999; font-size: 0.9em;">
-    <p>Powered by Hostalium</p>
-  </div>
-
 </body>
 </html>
